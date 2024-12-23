@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.7.2"}
+{"root":["./src/index.ts","./src/controller/user.ts","./src/lib/hashpassword.ts","./src/lib/token.ts","./src/lib/zodschema.ts","./src/routes/user.ts","./src/service/user.ts"],"version":"5.7.2"}

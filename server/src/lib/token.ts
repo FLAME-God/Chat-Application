@@ -3,7 +3,7 @@ import jwt, { JwtPayload } from "jsonwebtoken";
 const jwt_secret = process.env.JWT_PASSWORD || "kjsguynqwidg";
 
 interface CustomJwtPayload extends JwtPayload{
-    username: string
+    id: number
 } 
 
 export function createToken (payload: CustomJwtPayload){

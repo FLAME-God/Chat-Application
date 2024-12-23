@@ -50,7 +50,7 @@ const login: RequestHandler = async(req, res, next)=>{
             })
             return;
         }
-        const token = createToken({username:foundUser.username}) as string
+        const token = createToken({id:foundUser.user_id}) as string
         if(!token){
             res.status(500).json({
                 message: "Token not created"
