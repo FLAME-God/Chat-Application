@@ -14,8 +14,26 @@ datasource db {
 }
 
 model Users {
-  user_id  Int    @id @default(autoincrement())
-  username String @unique
-  email    String @unique
-  password String
+  user_id          Int        @id @default(autoincrement())
+  username         String     @unique
+  email            String     @unique
+  password         String
+  sentMessages     Messages[] @relation("Sender")
+  receivedMessages Messages[] @relation("Recevier")
+}
+
+model Messages {
+  message_id  Int    @id @default(autoincrement())
+  sender_id   Int
+  receiver_id Int
+  message     String
+  sender      Users  @relation("Sender", fields: [sender_id], references: [user_id])
+  receiver    Users  @relation("Recevier", fields: [receiver_id], references: [user_id])
+}
+
+model FriendRequest {
+  id          Int    @id @default(autoincrement())
+  sender_id   Int
+  receiver_id Int
+  status      String @default("pending")
 }
