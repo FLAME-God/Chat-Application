@@ -1,11 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../lib/token";
 
-interface AuthecicatedRequest extends Request {
-    user_id?: number;
+declare global {
+    namespace Express {
+        interface Request {
+            userId?: number; // Optional because middleware might not always set it
+        }
+    }
 }
 
-export const userAuth = (req: AuthecicatedRequest, res: Response, next: NextFunction)=>{
+type AuthenticatedRequestHandeler = (req: Request, res: Response, next: NextFunction)=>void;
+
+export const userAuth: AuthenticatedRequestHandeler = (req, res, next)=>{
     const authHeader = req.headers.authorization;
     if(!authHeader){
         return res.status(403).json({
@@ -15,7 +21,7 @@ export const userAuth = (req: AuthecicatedRequest, res: Response, next: NextFunc
     const token = authHeader.startsWith("Bearer ")? authHeader.split("")[1]: authHeader;
     try {
         const decoded = verifyToken(token);
-        req.user_id = decoded.id;
+        req.userId = decoded.id;
         next();
     } catch (error) {
         console.error(`Error while verifying the token: ${error}`);

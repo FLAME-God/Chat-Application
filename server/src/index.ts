@@ -1,5 +1,5 @@
 import express, { Express } from "express";
-import userRouter from "./routes/user";
+import appRouter from "./routes/index";
 import http from "http";
 import {Server} from "socket.io";
 import dotenv from "dotenv";
@@ -13,7 +13,7 @@ export const io = new Server(server)
 
 
 
-app.use("/api/v1", userRouter);
+app.use("/api/v1", appRouter);
 
 async function main(){
     server.listen(process.env.PORT, ()=>{
