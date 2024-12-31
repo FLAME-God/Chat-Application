@@ -1,4 +1,4 @@
-import { RequestHandler } from "express";
+import { Request, RequestHandler, Response } from "express";
 import { userSchema } from "../lib/zodSchema";
 import { comparePassword, hashPassword } from "../lib/hashPassword";
 import { CreateUser, findUser } from "../service/user";
@@ -67,4 +67,15 @@ const login: RequestHandler = async(req, res, next)=>{
     }
 }
 
-export default {register, login};
+
+const checkAuth = (req: Request, res: Response)=>{
+    try {
+        
+        res.status(200).json(req.userId);
+    } catch (error) {
+        console.log(`Error while checking auth ${error}`);
+        res.status(500).json("Internal server error");
+    }
+}
+
+export default {register, login,checkAuth };
