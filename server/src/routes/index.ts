@@ -5,7 +5,7 @@ import messageRoutes from "./message";
 
 const router: Router = express.Router();
 
-router.use("/user", userRoute);
+router.use("/auth", userRoute);
 router.use("/friend", friendRoutes);
 router.use("/message", messageRoutes);
 
