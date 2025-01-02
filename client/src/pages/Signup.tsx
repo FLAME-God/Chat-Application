@@ -11,7 +11,7 @@ import Input from "../components/Input";
 import { useRef, useState } from "react";
 import Button from "../components/Button";
 import useAuthStore from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthImagePattern from "../components/AuthImagePattern";
 import toast from "react-hot-toast";
 
@@ -21,6 +21,7 @@ const Signup = () => {
   const userNameRef = useRef<HTMLInputElement>();
   const emailRef = useRef<HTMLInputElement>();
   const passwordRef = useRef<HTMLInputElement>();
+  const navigate = useNavigate();
   function validateData() {
     const username = userNameRef.current?.value || "";
     const email = emailRef.current?.value || "";
@@ -44,6 +45,7 @@ const Signup = () => {
         email: emailRef.current?.value,
         password: passwordRef.current?.value,
       });
+      navigate("/signin");
     }
   }
   return (

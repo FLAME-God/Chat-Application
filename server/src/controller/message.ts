@@ -7,7 +7,8 @@ const sendMessage = async(req: Request, res: Response)=>{
     const senderId = req.userId;
     const text = req.body.text;
     try {
-        const message = await createMesssage(senderId!, reciverId, text)
+        const message = await createMesssage(senderId!, reciverId, text);
+        res.status(200).json(message)
     } catch (error) {
         console.log(error);
         res.status(500).json({message: "Internal server error"});
