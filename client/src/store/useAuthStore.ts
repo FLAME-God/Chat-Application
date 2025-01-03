@@ -3,14 +3,17 @@ import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 
 interface AuthStore {
-    authUser: number | null;
+    authUser: any;
     isSignup: boolean;
     isSignIn: boolean;
     isCheckingAuth: boolean;
+    isUploadingProfile: boolean;
     signup: (data: Object) => void;
     signin: (data: Object) => void;
     checkAuth: ()=>void;
     logout: ()=>void;
+    updateProfile: (data: string)=>void
+
   }
   
 
@@ -19,6 +22,7 @@ const useAuthStore  = create<AuthStore>((set)=>({
     isSignup: false,
     isSignIn: false,
     isCheckingAuth: true,
+    isUploadingProfile: false,
 
     checkAuth: async()=>{
         try {
@@ -69,6 +73,21 @@ logout: ()=>{
         toast.success("logout successfuly");
     } catch (error) {
         toast.error("something went wrong");
+    }
+},
+updateProfile: async(data)=>{
+    try {
+        set({isUploadingProfile: true});
+        const res = await axiosInstance.put("/auth/avatar", data);
+        const updatedUser = res.data.updatedUser;
+        set({authUser: updatedUser});
+        toast.success("profile pic uploded");
+    } catch (error) {
+        console.log(error);
+        set({isUploadingProfile: false});
+        toast.error("something went error");
+    }finally{
+        set({isUploadingProfile:false});
     }
 }
 

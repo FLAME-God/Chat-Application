@@ -82,26 +82,38 @@ const checkAuth = (req: Request, res: Response)=>{
     }
 }
 // user avatar controller
-const userAvatar = async(req: Request, res: Response) =>{
+ const userAvatar: RequestHandler = async (req, res) => {
     const userId = req.userId!;
-    const profilePic = req.body;
+    const profilePic = req.body.profilePic; // Assuming `profilePic` is in the request body as a base64 string.
+
     try {
-        if(!profilePic){
-            return res.status(400).json({
-                message:"Profile pic is required"
-            })
+        // Check if `profilePic` is provided
+        if (!profilePic) {
+            res.status(400).json({
+                message: "Profile picture is required",
+            });
+            return; // Ensure no further execution
         }
-        const uploadRes = await cloudinary.uploader.upload(profilePic).then(result => {return result.url});
-        const updatedUser = await createAvatar(uploadRes, userId);
+
+        // Upload the profile picture to Cloudinary
+        const uploadRes = await cloudinary.uploader.upload(profilePic, {
+            folder: "user_avatars", // Optional: Set a specific folder
+        });
+
+        // Update user avatar in the database
+        const updatedUser = await createAvatar(uploadRes.url, userId);
+
+        // Respond with success
         res.status(200).json({
-            message:"avater uploaded successfuly",
-            updatedUser
-        })
+            message: "Avatar uploaded successfully",
+            updatedUser,
+        });
     } catch (error) {
-        console.log(`Error ehile uploading avatar ${error}`);
+        console.error(`Error while uploading avatar: ${error}`);
         res.status(500).json({
-            message: "Internal server error"
-        })
+            message: "Internal server error",
+        });
     }
 }
+
 export default {register, login,checkAuth, userAvatar };
