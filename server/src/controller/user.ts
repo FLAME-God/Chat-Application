@@ -1,11 +1,10 @@
 import { Request, RequestHandler, Response } from "express";
 import { userSchema } from "../lib/zodSchema";
 import { comparePassword, hashPassword } from "../lib/hashPassword";
-import { CreateUser, findUser } from "../service/user";
+import { CreateUser, findUser, getUser } from "../service/user";
 import { createToken } from "../lib/token";
-import message from "./message";
 import cloudinary from "../lib/cloudenary";
-import { createAvatar } from "../service/avatar";
+import { createAvatar, getAvatar } from "../service/avatar";
 
 // user registraion controller
 const register: RequestHandler = async (req, res, next)=>{
@@ -46,7 +45,9 @@ const login: RequestHandler = async(req, res, next)=>{
             })
             return;
         }
-        const passwordMatch = await comparePassword(password, foundUser.password);
+        const hasedPassword = foundUser.password;
+        const userPassword = password;
+        const passwordMatch = await comparePassword(userPassword, hasedPassword);
         if(!passwordMatch){
             res.status(404).json({
                 message: "Invalid email or password"
@@ -71,10 +72,17 @@ const login: RequestHandler = async(req, res, next)=>{
 }
 
 // check user controller
-const checkAuth = (req: Request, res: Response)=>{
+const checkAuth = async(req: Request, res: Response)=>{
     try {
+        const userId = req.userId!;
+        const user = await getUser(userId);
+        const username = user?.username;
+        const email = user?.email;
+        const avatar = await getAvatar(userId);
         res.status(200).json({
-            userId: req.userId
+            username: username,
+            email: email,
+            avatar: avatar?.url
         });        
     } catch (error) {
         console.log(`Error while checking auth ${error}`);
@@ -84,29 +92,29 @@ const checkAuth = (req: Request, res: Response)=>{
 // user avatar controller
  const userAvatar: RequestHandler = async (req, res) => {
     const userId = req.userId!;
-    const profilePic = req.body.profilePic; // Assuming `profilePic` is in the request body as a base64 string.
-
+    console.log("request is comming");
+    const profilePic = req.body.profilePic;
+    console.log("request is excecuted");
     try {
-        // Check if `profilePic` is provided
         if (!profilePic) {
             res.status(400).json({
                 message: "Profile picture is required",
             });
-            return; // Ensure no further execution
+            return;
         }
-
-        // Upload the profile picture to Cloudinary
         const uploadRes = await cloudinary.uploader.upload(profilePic, {
-            folder: "user_avatars", // Optional: Set a specific folder
+            folder: "user_avatars", 
         });
-
-        // Update user avatar in the database
         const updatedUser = await createAvatar(uploadRes.url, userId);
-
-        // Respond with success
+        const url = updatedUser.url;
+        const user =await getUser(userId);
+        const username = user?.username;
+        const email = user?.email;
         res.status(200).json({
             message: "Avatar uploaded successfully",
-            updatedUser,
+            avatar: url,
+            username: username,
+            email: email
         });
     } catch (error) {
         console.error(`Error while uploading avatar: ${error}`);
@@ -116,4 +124,4 @@ const checkAuth = (req: Request, res: Response)=>{
     }
 }
 
-export default {register, login,checkAuth, userAvatar };
+export default {register, login, checkAuth, userAvatar };

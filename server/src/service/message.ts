@@ -20,3 +20,13 @@ export async function createMesssage(senderId: number, receiverId: number, text:
         }
     })
 }
+
+export async function getUserforMsg(userId: number){
+    return await client.users.findMany({
+        where:{
+            NOT:{
+                user_id: userId
+            }
+        }
+    })
+}

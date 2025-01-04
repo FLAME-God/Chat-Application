@@ -23,3 +23,12 @@ export async function findUser(email: string){
     })
     return user;
 }
+
+export async function getUser(userId: number){
+    const user = await client.users.findFirst({
+        where:{
+            user_id: userId
+        }
+    })
+    return user;
+}

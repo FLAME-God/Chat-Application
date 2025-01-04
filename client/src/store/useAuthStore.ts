@@ -12,11 +12,10 @@ interface AuthStore {
     signin: (data: Object) => void;
     checkAuth: ()=>void;
     logout: ()=>void;
-    updateProfile: (data: string)=>void
+    updateProfile: (data: Object)=>void
 
   }
   
-
 const useAuthStore  = create<AuthStore>((set)=>({
     authUser: null,
     isSignup: false,
@@ -79,8 +78,7 @@ updateProfile: async(data)=>{
     try {
         set({isUploadingProfile: true});
         const res = await axiosInstance.put("/auth/avatar", data);
-        const updatedUser = res.data.updatedUser;
-        set({authUser: updatedUser});
+        set({authUser: res.data});
         toast.success("profile pic uploded");
     } catch (error) {
         console.log(error);
@@ -88,6 +86,7 @@ updateProfile: async(data)=>{
         toast.error("something went error");
     }finally{
         set({isUploadingProfile:false});
+        
     }
 }
 

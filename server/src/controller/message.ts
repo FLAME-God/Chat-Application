@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { createMesssage, getMesssage } from "../service/message";
+import { createMesssage, getMesssage, getUserforMsg } from "../service/message";
 
 // Controller to send message
 const sendMessage = async(req: Request, res: Response)=>{
@@ -30,5 +30,18 @@ const getAllMessage = async(req: Request, res: Response)=>{
         
     }
 }
+// get all users for messages
+const getAllUsersforMsg = async(req: Request, res: Response)=>{
+    const userId = req.userId!;
+    try {
+        const userstoMsg = await getUserforMsg(userId);
+        res.status(200).json({userstoMsg});
+    } catch (error) {
+        console.log(`Error while getting users for messages ${error}`);
+        res.status(500).json({
+            message: "Internal server error"
+        })
+    }
+}
 
-export default {sendMessage, getAllMessage};
+export default {sendMessage, getAllMessage, getAllUsersforMsg};

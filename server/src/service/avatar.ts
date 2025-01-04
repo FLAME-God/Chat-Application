@@ -10,3 +10,11 @@ export async function createAvatar(url: string, userId: number){
         }
     })
 }
+
+export async function getAvatar(userId: number){
+    return await client.avatar.findFirst({
+        where:{
+            user_id: userId
+        }
+    })
+}

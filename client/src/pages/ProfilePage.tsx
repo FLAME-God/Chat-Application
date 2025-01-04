@@ -37,7 +37,7 @@ const ProfilePage = () => {
 
       // Update state and send data to backend
       setSelectedImage(base64Image);
-      updateProfile(base64Image);
+      updateProfile({ profilePic: base64Image });
     } catch (error) {
       console.error("Error uploading image:", error);
     }
@@ -54,7 +54,7 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImage || authUser!.url || "/image.png"}
+                src={selectedImage || authUser.avatar || "/image.png"}
                 alt="profile"
                 className="size-32 rounded-full object-cover border-4"
               />
@@ -89,7 +89,7 @@ const ProfilePage = () => {
                 Full Name
               </div>
               <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
-                username
+                {authUser.username}
               </p>
             </div>
             <div className="space-y-1.5">
@@ -97,7 +97,9 @@ const ProfilePage = () => {
                 <Mail className="size-4" />
                 Email
               </div>
-              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">email</p>
+              <p className="px-4 py-2.5 bg-base-200 rounded-lg border">
+                {authUser.email}
+              </p>
             </div>
           </div>
           <div className="mt-6 bg-blue-950/40 rounded-xl p-6">
