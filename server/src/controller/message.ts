@@ -34,8 +34,12 @@ const getAllMessage = async(req: Request, res: Response)=>{
 const getAllUsersforMsg = async(req: Request, res: Response)=>{
     const userId = req.userId!;
     try {
+        console.log("using this fun");
+        
         const userstoMsg = await getUserforMsg(userId);
-        res.status(200).json({userstoMsg});
+        console.log("fun is used");
+        
+        res.status(200).json(userstoMsg);
     } catch (error) {
         console.log(`Error while getting users for messages ${error}`);
         res.status(500).json({

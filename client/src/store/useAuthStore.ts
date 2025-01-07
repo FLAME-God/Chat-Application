@@ -92,4 +92,4 @@ updateProfile: async(data)=>{
 
 }));
 
-export default useAuthStore;   // Store the token in local storage
+export default useAuthStore;

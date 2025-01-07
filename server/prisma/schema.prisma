@@ -18,7 +18,7 @@ model Users {
   username         String
   email            String           @unique
   password         String
-  avatar           Avatar[]         @relation("Avatar")
+  avatar           Avatar?
   sentMessages     Messages[]       @relation("Sender")
   receivedMessages Messages[]       @relation("Recevier")
   sentRequests     FriendRequests[] @relation("SenderRequest")
@@ -56,6 +56,6 @@ model Friends {
 model Avatar {
   avatar_id Int    @id @default(autoincrement())
   url       String
-  user_id   Int
-  user      Users  @relation("Avatar", fields: [user_id], references: [user_id])
+  user_id   Int    @unique
+  user      Users  @relation(fields: [user_id], references: [user_id])
 }

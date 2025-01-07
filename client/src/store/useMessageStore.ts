@@ -2,8 +2,14 @@ import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
 
+ export interface User {
+    user_id: number;
+    username: string;
+    avatarUrl: string;
+}
+
 interface MessageStoreTypes {
-    messages: Array<Object>,
+    messages: Array<User>,
     users: Array<Object>,
     isSelectedUser: any,
     isMessageLoading: boolean,
@@ -22,7 +28,7 @@ const useMessageStore = create<MessageStoreTypes>((set)=>({
     getUsers: async()=>{
         try {
             set({isUserLoading: true});
-            const res = await axiosInstance("/message/getUsers");
+            const res = await axiosInstance.get("/message/getUsers");
             set({users: res.data});
         } catch (error) {
             console.log(`Error while fetching filterd users ${error}`);
@@ -35,7 +41,7 @@ const useMessageStore = create<MessageStoreTypes>((set)=>({
     getMessages: async(userId)=>{
         try {
             set({isMessageLoading: true});
-            const res = await axiosInstance(`/message/${userId}`);
+            const res = await axiosInstance.get(`/message/${userId}`);
             set({messages: res.data}); 
         } catch (error) {
             console.log(`Error while fectching messages of the user ${error}`);
