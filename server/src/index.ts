@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import appRouter from "./routes/index";
 import cors from "cors";
 import dotenv from "dotenv";
@@ -13,6 +13,12 @@ app.use(cors({
 }))
 
 app.use("/api/v1", appRouter);
+const routeError = (req: Request, res: Response, next: NextFunction) => {
+    res.status(404).json({
+        message: "Route not found",
+    });
+};
+app.use(routeError);
 
 async function main(){
     app.listen(process.env.PORT, ()=>{

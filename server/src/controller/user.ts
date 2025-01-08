@@ -5,6 +5,7 @@ import { CreateUser, findUser, getUser } from "../service/user";
 import { createToken } from "../lib/token";
 import cloudinary from "../lib/cloudenary";
 import { createAvatar, getAvatar } from "../service/avatar";
+import { AuthenticatedRequestHandler } from "../middleware/user";
 
 // user registraion controller
 const register: RequestHandler = async (req, res, next)=>{
@@ -72,7 +73,7 @@ const login: RequestHandler = async(req, res, next)=>{
 }
 
 // check user controller
-const checkAuth = async(req: Request, res: Response)=>{
+const checkAuth: AuthenticatedRequestHandler  = async(req, res)=>{
     try {
         const userId = req.userId!;
         const user = await getUser(userId);
@@ -90,7 +91,7 @@ const checkAuth = async(req: Request, res: Response)=>{
     }
 }
 // user avatar controller
- const userAvatar: RequestHandler = async (req, res) => {
+ const userAvatar: AuthenticatedRequestHandler  = async (req, res) => {
     const userId = req.userId!;
     console.log("request is comming");
     const profilePic = req.body.profilePic;

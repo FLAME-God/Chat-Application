@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { acceptRequest, getAllFriends, getPendingRequest, rejectRequest, sendRequest } from "../service/friendRequest";
+import { AuthenticatedRequestHandler } from "../middleware/user";
 
 
 
 // Cntroller to send friend request
-const sendFriendReq = async(req:Request, res: Response, next: NextFunction)=>{
+const sendFriendReq: AuthenticatedRequestHandler  = async(req, res, next)=>{
     const recevierId = req.params.id;
     const senderId = req.userId!;
     try {
@@ -19,7 +20,7 @@ const sendFriendReq = async(req:Request, res: Response, next: NextFunction)=>{
 }
 
 //get All pending friend retuest
-const allFriendReq = async(req: Request, res: Response, next: NextFunction)=>{
+const allFriendReq: AuthenticatedRequestHandler  = async(req, res, next)=>{
     const userId = req.userId!;
     try {
         const friendRequests = await getPendingRequest(userId);
@@ -34,7 +35,7 @@ const allFriendReq = async(req: Request, res: Response, next: NextFunction)=>{
 }
 
 // cntroller to accept friend request
-const acceptFriendReq = async (req: Request, res: Response, next: NextFunction)=>{
+const acceptFriendReq: AuthenticatedRequestHandler  = async (req, res, next)=>{
     const requestId = req.body;
     try {
         await acceptRequest(requestId);
@@ -62,7 +63,7 @@ const rejectFriendReq = async (req: Request, res: Response, next: NextFunction)=
 }
 
 // Controller to get All Friends
-const getAllFriend = async (req: Request, res: Response, next: NextFunction)=>{
+const getAllFriend: AuthenticatedRequestHandler  = async (req, res, next)=>{
     const usertId = req.userId!;
     try {
         const allFriends = await getAllFriends(usertId);

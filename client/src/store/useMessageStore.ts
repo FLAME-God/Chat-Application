@@ -5,30 +5,32 @@ import toast from "react-hot-toast";
  export interface User {
     user_id: number;
     username: string;
-    avatarUrl: string;
+    avatar: Object;
 }
 
 interface MessageStoreTypes {
     messages: Array<User>,
-    users: Array<Object>,
-    isSelectedUser: any,
+    users: any,
+    selectedUser: any,
     isMessageLoading: boolean,
     isUserLoading: boolean,
     getUsers: ()=>void,
-    getMessages: (userId: number)=>void
+    getMessages: (userId: number)=>void,
+    setSelectedUser: (selectedUser: any)=>void
 }
 
 const useMessageStore = create<MessageStoreTypes>((set)=>({
     messages: [],
     users: [],
-    isSelectedUser: null,
+    selectedUser: null,
     isMessageLoading: false,
     isUserLoading: false,
 
     getUsers: async()=>{
         try {
             set({isUserLoading: true});
-            const res = await axiosInstance.get("/message/getUsers");
+            const res = await axiosInstance.get("/message/users");
+            console.log(res)
             set({users: res.data});
         } catch (error) {
             console.log(`Error while fetching filterd users ${error}`);
@@ -49,7 +51,8 @@ const useMessageStore = create<MessageStoreTypes>((set)=>({
         }finally{
             set({isMessageLoading: false});
         }
-    }
+    },
+    setSelectedUser: (selectedUser)=> set({selectedUser})
 }))
 
 export default useMessageStore;

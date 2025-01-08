@@ -1,16 +1,12 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../lib/token";
 
-declare global {
-  namespace Express {
-    interface Request {
-      userId?: number; // Optional because middleware might not always set it
-    }
-  }
+interface AuthenticatedRequest extends Request {
+  userId?: number;
 }
 
-type AuthenticatedRequestHandler = (
-  req: Request,
+export type AuthenticatedRequestHandler = (
+  req: AuthenticatedRequest,
   res: Response,
   next: NextFunction
 ) => void;
@@ -30,9 +26,7 @@ export const userAuth: AuthenticatedRequestHandler = (req, res, next) => {
 
   try {
     // Assuming verifyToken returns an object with an `id` property
-    console.log("hi there");
     const decoded = verifyToken(token) as { id: number };
-    console.log("i am not there");
     
     req.userId = decoded.id;
     next();

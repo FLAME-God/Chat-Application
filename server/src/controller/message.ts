@@ -1,8 +1,10 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import { createMesssage, getMesssage, getUserforMsg } from "../service/message";
+import { AuthenticatedRequestHandler } from "../middleware/user";
+
 
 // Controller to send message
-const sendMessage = async(req: Request, res: Response)=>{
+const sendMessage: AuthenticatedRequestHandler = async(req, res)=>{
     const reciverId = parseInt(req.params.id);
     const senderId = req.userId;
     const text = req.body.text;
@@ -16,7 +18,7 @@ const sendMessage = async(req: Request, res: Response)=>{
 }
 
 // Controller to get all messages between two users
-const getAllMessage = async(req: Request, res: Response)=>{
+const getAllMessage: AuthenticatedRequestHandler  = async(req, res)=>{
     const receiverId = parseInt(req.params.id);
     const senderId = req.userId;
     try {
@@ -31,15 +33,13 @@ const getAllMessage = async(req: Request, res: Response)=>{
     }
 }
 // get all users for messages
-const getAllUsersforMsg = async(req: Request, res: Response)=>{
-    const userId = req.userId!;
+export const getAllUsersforMsg:AuthenticatedRequestHandler = async(req, res)=>{
     try {
-        console.log("using this fun");
-        
+        const userId = req.userId!;        
         const userstoMsg = await getUserforMsg(userId);
-        console.log("fun is used");
         
         res.status(200).json(userstoMsg);
+        
     } catch (error) {
         console.log(`Error while getting users for messages ${error}`);
         res.status(500).json({

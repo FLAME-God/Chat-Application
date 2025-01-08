@@ -1,22 +1,19 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import useMessageStore from "../store/useMessageStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
 
-interface User {
-  id: number;
-  username: string;
-  avatarUrl: string;
-}
-
 const Sidebar = () => {
-  const { getUsers, isUserLoading, users, isSelectedUser } = useMessageStore();
-  const [selectedUser, setSelectedUser] = useState<User | null | Object>(null);
+  const { getUsers, isUserLoading, users, selectedUser, setSelectedUser } =
+    useMessageStore();
+
   console.log(users[0]);
+  //@ts-ignore
+  const onlineUsers = [];
 
   useEffect(() => {
     getUsers();
-  }, [getUsers]);
+  }, []);
 
   if (isUserLoading) return <SidebarSkeleton />;
   return (
@@ -32,18 +29,34 @@ const Sidebar = () => {
               <button
                 key={user.user_id}
                 onClick={() => setSelectedUser(user)}
-                className={`w-full p-3 flex items-center gap-3 hover:bg-base-300 transition-colors ${
+                className={`w-full p-3 flex items-center gap-3 rounded-lg hover:bg-base-300 transition-colors ${
                   selectedUser?.user_id === user.user_id
                     ? "bg-base-300 ring-1 ring-base-300"
                     : ""
                 }`}
               >
-                <img
-                  src={user.avatar.url || "/image.png"}
-                  alt={`${user.username}'s avatar`}
-                  className="w-10 h-10 rounded-full"
-                />
-                <span className="hidden lg:block">{user.username}</span>
+                <div className="relative mx-auto lg:mx-0">
+                  <img
+                    src={user.avatar.url || "/image.png"}
+                    alt={`${user.username}'s avatar`}
+                    className="w-10 h-10 rounded-full"
+                  />
+                  {
+                    //@ts-ignore
+                    onlineUsers.includes(user.user_id) && (
+                      <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-950" />
+                    )
+                  }
+                </div>
+                <div className="hidden lg:block text-left min-w-0">
+                  <div className="font-medium truncate">{user.username}</div>
+                  <div className="text-sm text-zinc-400">
+                    {
+                      //@ts-ignore
+                      onlineUsers.includes(user.user_id) ? "online" : "offline"
+                    }
+                  </div>
+                </div>
               </button>
             ))
           ) : (

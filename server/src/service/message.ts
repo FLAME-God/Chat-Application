@@ -29,9 +29,8 @@ export async function createMesssage(senderId: number, receiverId: number, text:
 }
 
 export async function getUserforMsg(userId: number){
-    console.log("I am Creating");
     
-    const user= await client.users.findMany({
+    return await client.users.findMany({
         where: {
             NOT: {
                 user_id: userId,
@@ -43,7 +42,4 @@ export async function getUserforMsg(userId: number){
             avatar: true,
         },
     });
-    console.log("I have been created");
-    
-    return user;
 }
