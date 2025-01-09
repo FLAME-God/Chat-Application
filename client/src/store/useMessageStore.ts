@@ -16,10 +16,11 @@ interface MessageStoreTypes {
     isUserLoading: boolean,
     getUsers: ()=>void,
     getMessages: (userId: number)=>void,
-    setSelectedUser: (selectedUser: any)=>void
+    setSelectedUser: (selectedUser: any)=>void,
+    sendMessages: (messageData: string)=> void,
 }
 
-const useMessageStore = create<MessageStoreTypes>((set)=>({
+const useMessageStore = create<MessageStoreTypes>((set, get)=>({
     messages: [],
     users: [],
     selectedUser: null,
@@ -50,6 +51,15 @@ const useMessageStore = create<MessageStoreTypes>((set)=>({
             toast.error("something went wrong");
         }finally{
             set({isMessageLoading: false});
+        }
+    },
+    sendMessages: async(messageData)=>{
+        const {selectedUser, messages} = get();
+        try {
+            const res = await axiosInstance.post(`/message/createmsg/${selectedUser.user_id}`, messageData);
+            set({messages: [...messages, res.data]})
+        } catch (error: any) {
+            toast.error(error.res.data.message)
         }
     },
     setSelectedUser: (selectedUser)=> set({selectedUser})
