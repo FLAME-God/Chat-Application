@@ -2,9 +2,10 @@ import express, { Express, NextFunction, Request, Response } from "express";
 import appRouter from "./routes/index";
 import cors from "cors";
 import dotenv from "dotenv";
+import { app, server } from "./lib/socket";
 dotenv.config();
 
-const app: Express = express();
+
 app.use(express.json());
 
 app.use(cors({
@@ -21,7 +22,7 @@ const routeError = (req: Request, res: Response, next: NextFunction) => {
 app.use(routeError);
 
 async function main(){
-    app.listen(process.env.PORT, ()=>{
+    server.listen(process.env.PORT, ()=>{
         console.log(`server is listing on port ${process.env.PORT}`);
         
     })

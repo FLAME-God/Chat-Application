@@ -81,6 +81,7 @@ const checkAuth: AuthenticatedRequestHandler  = async(req, res)=>{
         const email = user?.email;
         const avatar = await getAvatar(userId);
         res.status(200).json({
+            userId: user?.user_id,
             username: username,
             email: email,
             avatar: avatar?.url

@@ -16,8 +16,9 @@ export async function getMesssage(senderId: number, receiverId: number){
     })
 }
 export async function createMesssage(senderId: number, receiverId: number, text: string ){
-    if (isNaN(senderId) || isNaN(receiverId)) {
-        return
+    if (isNaN(senderId) || isNaN(receiverId) || !text) {
+        console.log("something is missing");
+        return;
     }
     return await client.messages.create({
         data:{

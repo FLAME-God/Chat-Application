@@ -2,14 +2,15 @@ import { useEffect } from "react";
 import useMessageStore from "../store/useMessageStore";
 import SidebarSkeleton from "./skeletons/SidebarSkeleton";
 import { Users } from "lucide-react";
+import useAuthStore from "../store/useAuthStore";
 
 const Sidebar = () => {
   const { getUsers, isUserLoading, users, selectedUser, setSelectedUser } =
     useMessageStore();
 
-  console.log(users[0]);
-  //@ts-ignore
-  const onlineUsers = [];
+  const { onlineUsers } = useAuthStore();
+
+  console.log(onlineUsers);
 
   useEffect(() => {
     getUsers();
@@ -41,20 +42,16 @@ const Sidebar = () => {
                     alt={`${user.username}'s avatar`}
                     className="w-10 h-10 rounded-full"
                   />
-                  {
-                    //@ts-ignore
-                    onlineUsers.includes(user.user_id) && (
-                      <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-950" />
-                    )
-                  }
+                  {onlineUsers.includes(user.user_id.toString()) && (
+                    <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-950" />
+                  )}
                 </div>
                 <div className="hidden lg:block text-left min-w-0">
                   <div className="font-medium truncate">{user.username}</div>
                   <div className="text-sm text-zinc-400">
-                    {
-                      //@ts-ignore
-                      onlineUsers.includes(user.user_id) ? "online" : "offline"
-                    }
+                    {onlineUsers.includes(user.user_id.toString())
+                      ? "online"
+                      : "offline"}
                   </div>
                 </div>
               </button>

@@ -1,8 +1,10 @@
 import { X } from "lucide-react";
 import useMessageStore from "../store/useMessageStore";
+import useAuthStore from "../store/useAuthStore";
 
 const ChatHeader = () => {
   const { selectedUser, setSelectedUser } = useMessageStore();
+  const { onlineUsers } = useAuthStore();
   return (
     <div className="p-2.5 border-b border-base-300">
       <div className="flex items-center justify-between">
@@ -18,7 +20,11 @@ const ChatHeader = () => {
           </div>
           <div>
             <h3 className="font-medium">{selectedUser.username}</h3>
-            <p className="">offline</p>
+            <p className="">
+              {onlineUsers.includes(selectedUser.user_id.toString())
+                ? "online"
+                : "offline"}
+            </p>
           </div>
         </div>
         {/* Close button */}
