@@ -1,9 +1,13 @@
 import { Camera, Mail, User } from "lucide-react";
 import useAuthStore from "../store/useAuthStore";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const ProfilePage = () => {
   const { authUser, isUploadingProfile, updateProfile } = useAuthStore();
+  if (!authUser) {
+    return toast.error("something went wrong");
+  }
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -54,7 +58,13 @@ const ProfilePage = () => {
           <div className="flex flex-col items-center gap-4">
             <div className="relative">
               <img
-                src={selectedImage || authUser.avatar || "/image.png"}
+                src={
+                  selectedImage
+                    ? selectedImage
+                    : authUser.avatar?.url // Use the `url` property if `avatar` is an object
+                    ? authUser.avatar.url
+                    : "/image.png" // Default fallback
+                }
                 alt="profile"
                 className="size-32 rounded-full object-cover border-4"
               />

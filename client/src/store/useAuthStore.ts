@@ -12,6 +12,7 @@ interface Avatar{
 
 interface User {
     userId: number;
+    email: string;
     username: string;
     avatar: Avatar;
 }

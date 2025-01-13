@@ -4,7 +4,9 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { app, server } from "./lib/socket";
 dotenv.config();
+import path from "path";
 
+const __dirname = path.resolve();
 
 app.use(express.json());
 
@@ -20,6 +22,14 @@ const routeError = (req: Request, res: Response, next: NextFunction) => {
     });
 };
 app.use(routeError);
+
+if (process.env.NODE_ENV === "production") {
+    app.use(express.static(path.join(__dirname, "../client/dist")));
+  
+    app.get("*", (req, res) => {
+      res.sendFile(path.join(__dirname, "../client", "dist", "index.html"));
+    });
+  }
 
 async function main(){
     server.listen(process.env.PORT, ()=>{

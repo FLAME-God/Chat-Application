@@ -84,7 +84,7 @@ const checkAuth: AuthenticatedRequestHandler  = async(req, res)=>{
             userId: user?.user_id,
             username: username,
             email: email,
-            avatar: avatar?.url
+            avatar: avatar
         });        
     } catch (error) {
         console.log(`Error while checking auth ${error}`);
