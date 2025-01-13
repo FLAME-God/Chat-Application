@@ -18,7 +18,7 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "@prisma/client": "^6.2.0",
+    "@prisma/client": "^6.2.1",
     "bcrypt": "^5.1.1",
     "chatapp": "file:..",
     "cloudinary": "^2.5.1",
