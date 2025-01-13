@@ -49,10 +49,8 @@ const Signin = () => {
               <div className="size-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
                 <MessagesSquare className="size-6 text-primary" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Create Account</h1>
-              <p className="text-slate-500">
-                Get started with your free account
-              </p>
+              <h1 className="text-2xl font-bold mt-2">Login to Account</h1>
+              <p className="text-slate-500">Login to your free account</p>
             </div>
             <form action="" className="space-y-6">
               <div className="form-control">
@@ -98,7 +96,7 @@ const Signin = () => {
               </div>
               <Button
                 type="submit"
-                text="Create Account"
+                text="Login"
                 desabled={isSignIn}
                 loadingIcon={<Loader2 className="size-5 animate-spin" />}
                 onClick={onClick}

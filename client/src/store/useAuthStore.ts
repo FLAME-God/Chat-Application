@@ -48,7 +48,6 @@ const useAuthStore  = create<AuthStore>((set, get)=>({
             set({authUser: res.data});
             get().connectSocket();
         } catch (error) {
-            console.log(`Error while checking auth: ${error}`)
             set({authUser: null})
         }finally{
             set({isCheckingAuth: false});
