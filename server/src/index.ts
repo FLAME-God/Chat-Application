@@ -6,7 +6,7 @@ import { app, server } from "./lib/socket";
 dotenv.config();
 import path from "path";
 
-const __dirname = path.resolve();
+const __dirname = path.dirname(__filename);
 
 app.use(express.json());
 
